@@ -22,6 +22,7 @@ public class Setup {
     public void closeDriver(){
         // DashboardPage dashboardPage=new DashboardPage(driver);
         // dashboardPage.doLogout();
-//        driver.close();
+        // driver.close();
+        System.out.println("Test End, Close called");
     }
 }

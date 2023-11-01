@@ -28,7 +28,7 @@ public class LoginTestRunner extends Setup {
     public void doLogin() throws IOException, ParseException {
         loginPage = new LoginPage(driver);
         String username, password;
-        JSONObject userObject = Utils.loadJSONFile("./src/test/resources/User.json");
+        JSONObject userObject = Utils.readJSONFile("./src/test/resources/User.json");
         if (System.getProperty("username") != null && System.getProperty("password") != null) {
             username = System.getProperty("username");
             password = System.getProperty("password");

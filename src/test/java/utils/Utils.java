@@ -20,13 +20,6 @@ public class Utils {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,"+heightPixel+")");
     }
-    public static JSONObject loadJSONFile(String fileLocation) throws IOException, ParseException {
-        JSONParser jsonParser = new JSONParser();
-        Object obj = jsonParser.parse(new FileReader(fileLocation));
-        JSONObject jsonObject = (JSONObject) obj;
-        return jsonObject;
-
-    }
     public static void waitForElement(WebDriver driver, WebElement webElement, int timeunit_sec){
         WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(timeunit_sec));
         wait.until(ExpectedConditions.visibilityOf(webElement));
@@ -35,28 +28,41 @@ public class Utils {
         return  (int) Math.round(Math.random()*(max-min)+min);
     }
 
+    public static JSONObject readJSONFile(String fileLocation) throws IOException, ParseException {
+        JSONParser jsonParser = new JSONParser();
+        Object obj = jsonParser.parse(new FileReader(fileLocation)); // Parsing the jsonFile text into Default object type
+        JSONObject jsonObject = (JSONObject) obj; // Cast the Default object to JsonObject type object
+        return jsonObject;
+    }
 
-    public static void addJsonArray(String firstName, String lastName, String username, String password) throws IOException, ParseException {
+    public static void writeJsonNewUserArray( String employeeId, String firstName, String lastName, String username, String password) throws IOException, ParseException {
         String fileName="./src/test/resources/NewUsers.json";
         JSONParser jsonParser = new JSONParser();
-        Object obj = jsonParser.parse(new FileReader(fileName));
-        JSONObject userObj = new JSONObject();
-        JSONArray jsonArray = (JSONArray) obj;
+        Object obj = jsonParser.parse(new FileReader(fileName)); // Parsing the jsonFile text into Default object type
+        JSONArray jsonArray = (JSONArray) obj; // Cast the Default object to JsonArray type object
+        JSONObject userObj = new JSONObject(); // Declare a blank JsonObject element & the populate the blank object with method parameter
 
         userObj.put("firstname",firstName);
         userObj.put("lastname",lastName);
         userObj.put("username",username);
         userObj.put("password",password);
-        jsonArray.add(userObj);
+        jsonArray.add(userObj); // Add a new node to the JsonArray object
 
         FileWriter file = new FileWriter(fileName);
         file.write(jsonArray.toJSONString());
         file.flush();
         file.close();
-
     }
 
-    // public static void main(String[] args) throws IOException, ParseException {
-    //System.out.println(generateRandomNumber(10,50));
-    // }
+//    public static void main(String[] args) throws IOException, ParseException {
+////        Check generateRandomNumber method
+//        System.out.println(generateRandomNumber(10,50));
+//
+////        Check readJSONFile method
+//        JSONObject userObject = Utils.readJSONFile("./src/test/resources/User.json");
+//        String username = (String) userObject.get("username");
+//        String password = (String) userObject.get("password");
+//        System.out.println(username);
+//        System.out.println(password);
+//    }
 }
