@@ -22,6 +22,7 @@ public class LoginTestRunner extends Setup {
         String message_actual = loginPage.doLoginWithInvalidCreds("admin", "wrongpass");
         String message_expected = "Invalid credentials";
         Assert.assertTrue(message_actual.contains(message_expected));
+        System.out.println("Login Test-1");
     }
 
     @Test(priority = 2, description = "User can do login successfully")
@@ -37,7 +38,6 @@ public class LoginTestRunner extends Setup {
             password = (String) userObject.get("password");
         }
 
-
         loginPage.doLogin(username, password);
 
         WebElement headerText = driver.findElement(By.tagName("h6"));
@@ -48,7 +48,16 @@ public class LoginTestRunner extends Setup {
         WebElement profileImageElement = driver.findElement(By.className("oxd-userdropdown-img"));
         softAssert.assertTrue(profileImageElement.isDisplayed());
         softAssert.assertAll();
+        System.out.println("Login Test-2");
     }
 
+    @Test(priority = 3, description = "User can do log-out successfully")
+    public void doLogOut() {
+        loginPage = new LoginPage(driver);
+        String message_actual = loginPage.doLogOut();
+        String message_expected = "Login";
+        Assert.assertTrue(message_actual.contains(message_expected));
+        System.out.println("Login Test-3");
+    }
 }
 

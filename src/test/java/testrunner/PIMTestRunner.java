@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import pages.DashboardPage;
@@ -14,6 +15,7 @@ import setup.Setup;
 import utils.Utils;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class PIMTestRunner extends Setup {
      DashboardPage dashboardPage;
@@ -27,29 +29,64 @@ public class PIMTestRunner extends Setup {
         String username = (String) userObject.get("username");
         String password = (String) userObject.get("password");
         loginPage.doLogin(username, password);
+        System.out.println("Execute doLogin");
     }
 
-//    @Test(priority = 1, description = "Create new employee")
-//    public void addEmployee() throws InterruptedException, IOException, ParseException {
-//         pimPage = new PIMPage(driver);
-//         Faker faker = new Faker();
-//         String firstName = faker.name().firstName();
-//         String lastName = faker.name().lastName();
-//         int empId = Utils.generateRandomNumber(10000, 99999);
-//         String employeeId = String.valueOf(empId);
-//         String username = "test" + Utils.generateRandomNumber(1000, 9999);
-//         String password = "P@ssword123";
-//         pimPage.createEmployee(employeeId, firstName,lastName, username, password);
-//
-//         Thread.sleep(7000);
-//         String header_actual = driver.findElement(By.className("orangehrm-main-title")).getText();
-//         String header_expected = "Personal Details";
-//         Assert.assertTrue(header_actual.contains(header_expected));
-//
-//         Utils.writeJsonNewUserArray(employeeId, firstName, lastName, username, password);
-//     }
+    @Test(priority = 1, description = "Check blank username validation is given", enabled = true)
+    public void addEmployeeWithoutUsername() throws InterruptedException {
+         pimPage = new PIMPage(driver);
+         pimPage.linkPimPage0th.get(0).click();
+         pimPage.btnAddEmployee2nd.get(2).click();
+         HashMap<String, String> newUserData = Utils.generateRandomUserInfo();
+         pimPage.createEmployee(newUserData.get("employeeId"), newUserData.get("firstName"), newUserData.get("lastName"), "", newUserData.get("password"));
+         Thread.sleep(7000);
+         String header_actual = driver.findElements(By.className("oxd-text")).get(16).getText();
+         String header_expected = "Required";
+         Assert.assertTrue(header_actual.contains(header_expected));
+         System.out.println("Invalid Employee End");
+     }
+
+    @Test(priority = 2, description = "Create employee 1", enabled = true)
+    public void addEmployee1() throws InterruptedException, IOException, ParseException {
+         pimPage = new PIMPage(driver);
+         pimPage.linkPimPage0th.get(0).click();
+         pimPage.btnAddEmployee2nd.get(2).click();
+         HashMap<String, String> newUserData = Utils.generateRandomUserInfo();
+         pimPage.createEmployee(newUserData.get("employeeId"), newUserData.get("firstName"), newUserData.get("lastName"), newUserData.get("username"), newUserData.get("password"));
+         Thread.sleep(7000);
+         String header_actual = driver.findElement(By.className("orangehrm-main-title")).getText();
+         String header_expected = "Personal Details";
+         Assert.assertTrue(header_actual.contains(header_expected));
+
+         Utils.writeJsonNewUserArray(newUserData.get("employeeId"), newUserData.get("firstName"), newUserData.get("lastName"), newUserData.get("username"), newUserData.get("password"));
+         System.out.println("1st Employee End");
+     }
+
+    @Test(priority = 3, description = "Create employee 2", enabled = true)
+    public void addEmployee2() throws InterruptedException, IOException, ParseException {
+         pimPage = new PIMPage(driver);
+         pimPage.linkPimPage0th.get(0).click();
+         pimPage.btnAddEmployee2nd.get(2).click();
+         HashMap<String, String> newUserData = Utils.generateRandomUserInfo();
+         pimPage.createEmployee(newUserData.get("employeeId"), newUserData.get("firstName"), newUserData.get("lastName"), newUserData.get("username"), newUserData.get("password"));
+         Thread.sleep(7000);
+         String header_actual = driver.findElement(By.className("orangehrm-main-title")).getText();
+         String header_expected = "Personal Details";
+         Assert.assertTrue(header_actual.contains(header_expected));
+
+         Utils.writeJsonNewUserArray(newUserData.get("employeeId"), newUserData.get("firstName"), newUserData.get("lastName"), newUserData.get("username"), newUserData.get("password"));
+         System.out.println("2nd Employee End");
+    }
 
 //     @Test(priority = 1, description = "User can view exisitng employee list")
+//     public static void main(String[] args) {
+//         System.out.println(Utils.generateRandomUserInfo());
+//         HashMap<String, String> newUserData = Utils.generateRandomUserInfo();
+//         System.out.println("Hello");
+//         System.out.println(newUserData.get("firstName"));
+//     }
+
+//     @Test(priority = 1, description = "User can view exisitng employee list", enabled = false)
 //     public void searchEmployeeInfo() throws InterruptedException {
 //         dashboardPage = new DashboardPage(driver);
 //         Thread.sleep(3000);
@@ -57,7 +94,6 @@ public class PIMTestRunner extends Setup {
 //         Thread.sleep(3000);
 //         String isUserFound = driver.findElements(By.className("oxd-text--span")).get(11).getText();
 //         Assert.assertTrue(isUserFound.contains("Records Found"));
-//
 //     }
 
 //     @Test(priority = 3, description = "User can search employee by employee status", enabled = false)
@@ -74,5 +110,10 @@ public class PIMTestRunner extends Setup {
 
 //     }
 
-
+    @AfterTest
+    public void doLogOut() {
+        loginPage = new LoginPage(driver);
+        loginPage.doLogOut();
+        System.out.println("Logout from Pim");
+    }
 }

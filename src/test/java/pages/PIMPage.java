@@ -1,5 +1,4 @@
 package pages;
-
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +10,8 @@ import java.util.List;
 public class PIMPage {
     @FindBy(css = ".oxd-sidepanel-body ul li:nth-child(2)")
     public List<WebElement> linkPimPage0th;
+    @FindBy(className = "oxd-button")
+    public List<WebElement> btnAddEmployee2nd;
     @FindBy(css = "[name=firstName]")
     public WebElement txtFirstName;
     @FindBy(css = "[name=lastName]")
@@ -53,6 +54,7 @@ public class PIMPage {
         txtConfirmPassword11th.get(11).sendKeys(password);
         Thread.sleep(1500);
         btnSaveEmployee.click();
+        System.out.println("pimPage - Create Employee");
     }
     public void createEmployeeWithoutUsername(String firstname, String lastname, String employeeId, String password) throws InterruptedException {
         txtFirstName.sendKeys(firstname);

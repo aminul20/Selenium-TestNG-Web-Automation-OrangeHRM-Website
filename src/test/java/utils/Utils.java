@@ -1,5 +1,6 @@
 package utils;
 
+import com.github.javafaker.Faker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -14,6 +15,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 
 public class Utils {
     public static void doScroll(WebDriver driver, int heightPixel){
@@ -26,6 +28,23 @@ public class Utils {
     }
     public static int generateRandomNumber(int min, int max){
         return  (int) Math.round(Math.random()*(max-min)+min);
+    }
+
+    public static HashMap<String, String> generateRandomUserInfo(){
+        Faker faker = new Faker();
+        HashMap<String, String> randomUser = new HashMap<String, String>();
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+        int empId = generateRandomNumber(10000, 99999);
+        String employeeId = String.valueOf(empId);
+        String username = "test" + generateRandomNumber(1000, 9999);
+        String password = "P@ssword123";
+        randomUser.put("employeeId", employeeId);
+        randomUser.put("firstName", firstName);
+        randomUser.put("lastName", lastName);
+        randomUser.put("username", username);
+        randomUser.put("password", password);
+        return randomUser;
     }
 
     public static JSONObject readJSONFile(String fileLocation) throws IOException, ParseException {
@@ -42,6 +61,7 @@ public class Utils {
         JSONArray jsonArray = (JSONArray) obj; // Cast the Default object to JsonArray type object
         JSONObject userObj = new JSONObject(); // Declare a blank JsonObject element & the populate the blank object with method parameter
 
+        userObj.put("id",employeeId);
         userObj.put("firstname",firstName);
         userObj.put("lastname",lastName);
         userObj.put("username",username);
